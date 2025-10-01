@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package users;
+
+service UserService {
+  rpc userList (Request) returns (Response);
+}
+
+message Request {
+}
+
+message Response {
+  repeated User data = 1;
+}
+message User {
+  int32 id = 1;
+  string name = 2;
+  string username = 3;
+  string email = 4;
+  Address address = 5;
+  string phone = 6;
+  string website = 7;
+  Company company = 8;
+}
+
+// Address object
+message Address {
+  string street = 1;
+  string suite = 2;
+  string city = 3;
+  string zipcode = 4;
+  Geo geo = 5;
+}
+
+// Geo object
+message Geo {
+  string lat = 1;
+  string lng = 2;
+}
+
+// Company object
+message Company {
+  string name = 1;
+  string catchPhrase = 2;
+  string bs = 3;
+}
