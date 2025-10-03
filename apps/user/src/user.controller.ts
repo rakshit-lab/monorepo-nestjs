@@ -8,7 +8,7 @@ export class UserController {
   
    @GrpcMethod('UserService', 'userList')
     async userList(): Promise<any> {
-     const users:any = await this.userService.userList();
+    const users:any = await this.userService.userList();
     return { data :users };
     }
 

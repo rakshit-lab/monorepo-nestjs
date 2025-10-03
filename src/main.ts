@@ -29,7 +29,17 @@ async function bootstrap() {
     },
   });
 
-  await Promise.all([ordersApp.listen(), usersApp.listen()]);
+  const App = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,{
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'nest-app',
+        brokers: ['localhost:9092'], // Kafka broker
+      }
+    }
+  });
+
+  await Promise.all([ordersApp.listen(), usersApp.listen(), App.listen()]);
   console.log('Both gRPC microservices are running');
 }
 

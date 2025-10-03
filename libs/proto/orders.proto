@@ -5,6 +5,8 @@ package orders;
 service OrdersService {
   rpc Multiply (SumRequest) returns (SumResponse);
   rpc Add (SumRequest) returns (SumResponse);
+  rpc addOrder (Request) returns (Response);
+  rpc getOrder (GetRequest) returns (GetResponse);
 }
 
 message SumRequest {
@@ -14,4 +16,28 @@ message SumRequest {
 
 message SumResponse {
   int32 result = 1;
+}
+
+message Request {
+  string number = 1;
+  string product= 2;
+  string quantity= 3;
+}
+
+message Response {
+  int32 id = 1;
+  string number = 2;
+  string product= 3;
+  string quantity= 4;
+}
+
+message GetRequest {
+  int32 orderId = 1;
+}
+
+message GetResponse {
+  int32 id = 1;
+  string number = 2;
+  string product= 3;
+  string quantity= 4;
 }

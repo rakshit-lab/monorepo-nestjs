@@ -7,9 +7,21 @@ import { join } from 'path';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserModule } from 'apps/user/src/user.module';
 import { HttpModule } from '@nestjs/axios';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',   // or mysql, sqlite, etc.
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'admin',
+      database: 'nest-microservice-db',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+
     ClientsModule.register([
       {
         name: 'ORDER_SERVICE',

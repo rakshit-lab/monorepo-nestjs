@@ -30,6 +30,19 @@ export interface SumResponse {
   result: number;
 }
 
+export interface Request {
+  number: string;
+  product: string;
+  quantity: string;
+}
+
+export interface Response {
+  id: number;
+  number: string;
+  product: string;
+  quantity: string;
+}
+
 function createBaseSumRequest(): SumRequest {
   return { a: 0, b: 0 };
 }
@@ -164,6 +177,206 @@ export const SumResponse: MessageFns<SumResponse> = {
   },
 };
 
+function createBaseRequest(): Request {
+  return { number: "", product: "", quantity: "" };
+}
+
+export const Request: MessageFns<Request> = {
+  encode(message: Request, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.number !== "") {
+      writer.uint32(10).string(message.number);
+    }
+    if (message.product !== "") {
+      writer.uint32(18).string(message.product);
+    }
+    if (message.quantity !== "") {
+      writer.uint32(26).string(message.quantity);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Request {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.number = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.product = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.quantity = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Request {
+    return {
+      number: isSet(object.number) ? globalThis.String(object.number) : "",
+      product: isSet(object.product) ? globalThis.String(object.product) : "",
+      quantity: isSet(object.quantity) ? globalThis.String(object.quantity) : "",
+    };
+  },
+
+  toJSON(message: Request): unknown {
+    const obj: any = {};
+    if (message.number !== "") {
+      obj.number = message.number;
+    }
+    if (message.product !== "") {
+      obj.product = message.product;
+    }
+    if (message.quantity !== "") {
+      obj.quantity = message.quantity;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Request>, I>>(base?: I): Request {
+    return Request.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Request>, I>>(object: I): Request {
+    const message = createBaseRequest();
+    message.number = object.number ?? "";
+    message.product = object.product ?? "";
+    message.quantity = object.quantity ?? "";
+    return message;
+  },
+};
+
+function createBaseResponse(): Response {
+  return { id: 0, number: "", product: "", quantity: "" };
+}
+
+export const Response: MessageFns<Response> = {
+  encode(message: Response, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== 0) {
+      writer.uint32(8).int32(message.id);
+    }
+    if (message.number !== "") {
+      writer.uint32(18).string(message.number);
+    }
+    if (message.product !== "") {
+      writer.uint32(26).string(message.product);
+    }
+    if (message.quantity !== "") {
+      writer.uint32(34).string(message.quantity);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Response {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.id = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.number = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.product = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.quantity = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Response {
+    return {
+      id: isSet(object.id) ? globalThis.Number(object.id) : 0,
+      number: isSet(object.number) ? globalThis.String(object.number) : "",
+      product: isSet(object.product) ? globalThis.String(object.product) : "",
+      quantity: isSet(object.quantity) ? globalThis.String(object.quantity) : "",
+    };
+  },
+
+  toJSON(message: Response): unknown {
+    const obj: any = {};
+    if (message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.number !== "") {
+      obj.number = message.number;
+    }
+    if (message.product !== "") {
+      obj.product = message.product;
+    }
+    if (message.quantity !== "") {
+      obj.quantity = message.quantity;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Response>, I>>(base?: I): Response {
+    return Response.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Response>, I>>(object: I): Response {
+    const message = createBaseResponse();
+    message.id = object.id ?? 0;
+    message.number = object.number ?? "";
+    message.product = object.product ?? "";
+    message.quantity = object.quantity ?? "";
+    return message;
+  },
+};
+
 export type OrdersServiceService = typeof OrdersServiceService;
 export const OrdersServiceService = {
   multiply: {
@@ -184,11 +397,21 @@ export const OrdersServiceService = {
     responseSerialize: (value: SumResponse): Buffer => Buffer.from(SumResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): SumResponse => SumResponse.decode(value),
   },
+  addOrder: {
+    path: "/orders.OrdersService/addOrder",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: Request): Buffer => Buffer.from(Request.encode(value).finish()),
+    requestDeserialize: (value: Buffer): Request => Request.decode(value),
+    responseSerialize: (value: Response): Buffer => Buffer.from(Response.encode(value).finish()),
+    responseDeserialize: (value: Buffer): Response => Response.decode(value),
+  },
 } as const;
 
 export interface OrdersServiceServer extends UntypedServiceImplementation {
   multiply: handleUnaryCall<SumRequest, SumResponse>;
   add: handleUnaryCall<SumRequest, SumResponse>;
+  addOrder: handleUnaryCall<Request, Response>;
 }
 
 export interface OrdersServiceClient extends Client {
@@ -215,6 +438,18 @@ export interface OrdersServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: SumResponse) => void,
+  ): ClientUnaryCall;
+  addOrder(request: Request, callback: (error: ServiceError | null, response: Response) => void): ClientUnaryCall;
+  addOrder(
+    request: Request,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: Response) => void,
+  ): ClientUnaryCall;
+  addOrder(
+    request: Request,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: Response) => void,
   ): ClientUnaryCall;
 }
 
